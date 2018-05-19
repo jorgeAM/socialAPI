@@ -15,7 +15,32 @@ async function signUp(req, res) {
       const user = await newUser.save();
       res.status(200).send({ user: user });
     }else {
-      res.status(200).send({ message: 'Debes llenar todos los campos' });
+      res.status(404).send({ message: 'Debes llenar todos los campos' });
+    }
+  }catch (err) {
+    res.status(500).send({ err: err });
+  }
+}
+
+async function signIn(req, res) {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({
+      email,
+    });
+    if (user === null) {
+      res.status(500).send({ message: 'Usuario no existe' });
+    }else {
+      if (bcrypt.compareSync(password, user.password)) {
+        if (req.body.getToken) {
+          // Devolvemos token
+          console.log('token');
+        }else {
+          res.status(200).send({ user: user });
+        }
+      }else {
+        res.status(404).send({ message: 'Contraseña incorrecta' });
+      }
     }
   }catch (err) {
     res.status(500).send({ err: err });
@@ -24,4 +49,5 @@ async function signUp(req, res) {
 
 export {
   signUp,
+  signIn
 };
