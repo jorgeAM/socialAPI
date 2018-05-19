@@ -16,6 +16,7 @@ const userSchema = Schema({
   nick: {
     type: String,
     trim: true,
+    unique: true,
   },
   email: {
     type: String,
