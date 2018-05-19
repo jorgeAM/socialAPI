@@ -1,5 +1,6 @@
 import User from '../models/user';
 import bcrypt from 'bcrypt-nodejs';
+import { codificar } from '../services/jwt';
 
 async function signUp(req, res) {
   try {
@@ -34,7 +35,8 @@ async function signIn(req, res) {
       if (bcrypt.compareSync(password, user.password)) {
         if (req.body.getToken) {
           // Devolvemos token
-          console.log('token');
+          const token = codificar(user);
+          res.status(200).send({ token: token });
         }else {
           res.status(200).send({ user: user });
         }
