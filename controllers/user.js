@@ -59,8 +59,18 @@ async function getUser(req, res) {
   }
 }
 
+async function getUsers(req, res) {
+  try {
+    const users = await User.find();
+    res.status(200).send({ users: users });
+  } catch (err) {
+    res.status(500).send({ err: err });
+  }
+}
+
 export {
   signUp,
   signIn,
-  getUser
+  getUser,
+  getUsers
 };
