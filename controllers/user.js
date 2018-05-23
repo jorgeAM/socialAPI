@@ -49,7 +49,18 @@ async function signIn(req, res) {
   }
 }
 
+async function getUser(req, res) {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    res.status(200).send({ user: user });
+  } catch (err) {
+    res.status(500).send({ err: err });
+  }
+}
+
 export {
   signUp,
-  signIn
+  signIn,
+  getUser
 };

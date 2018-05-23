@@ -12,7 +12,6 @@ export const isAuth = function (req, res, next) {
         res.status(401).send({ message: 'Token expirado' });
       }else {
         req.user = user;
-        console.log(req.user);
       }
     } catch (ex) {
       res.status(404).send({ message: 'Token inválido' });
