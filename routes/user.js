@@ -6,7 +6,8 @@ const api = express.Router();
 
 api.post('/sign-up', userController.signUp);
 api.post('/sign-in', userController.signIn);
-api.get('/users', authMiddleware.isAuth, userController.getUsers);
+api.get('/users/:page?', authMiddleware.isAuth, userController.getUsers);
 api.get('/user/:id', authMiddleware.isAuth, userController.getUser);
+api.put('/user/:id', authMiddleware.isAuth, userController.updateProfile);
 
 export default api;
