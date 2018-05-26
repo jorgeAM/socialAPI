@@ -1,6 +1,8 @@
 import User from '../models/user';
 import bcrypt from 'bcrypt-nodejs';
 import { codificar } from '../services/jwt';
+import fs from  'fs';
+import path from 'path';
 import 'mongoose-pagination';
 
 async function signUp(req, res) {
@@ -27,9 +29,7 @@ async function signUp(req, res) {
 async function signIn(req, res) {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({
-      email,
-    });
+    const user = await User.findOne({ email });
     if (user === null) {
       res.status(500).send({ message: 'Usuario no existe' });
     }else {
@@ -84,7 +84,41 @@ async function updateProfile(req, res) {
 }
 
 async function uploadAvatar(req, res) {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    if (id == req.user.sub) {
+      if (req.files) {
+        let path = req.files.avatar.path;
+        let array = path.split('/');
+        let image = array[2];
+        let type = req.files.avatar.type;
+        console.log(type);
+        if (type == 'image/jpeg' || type == 'image/png' || type == 'image/jpg') {
+          const user = await User.findByIdAndUpdate(id, { image }, { new: true });
+          res.status(200).send({ user });
+        }else {
+          fs.unlinkSync(req.files.avatar.path);
+          res.status(500).send({ message: 'Solo puedes subir imágenes' });
+        }
+      }else {
+        res.status(500).send({ message: 'Sube una imagen' });
+      }
+    }else {
+      if (req.files) fs.unlink(req.files.avatar.path);
+      res.status(200).send({ message: 'No puedes subir avatar de un perfil que no sea el tuyo' });
+    }
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+}
+
+function getAvatar(req, res) {
+  const { avatar } = req.params;
+  const ruta = `./uploads/users/${avatar}`;
+  fs.stat(ruta, (err, stats) => {
+    if (err) res.status(500).send({ err });
+    res.sendFile(path.resolve(ruta));
+  });
 }
 
 export {
@@ -93,4 +127,6 @@ export {
   getUser,
   getUsers,
   updateProfile,
+  uploadAvatar,
+  getAvatar,
 };

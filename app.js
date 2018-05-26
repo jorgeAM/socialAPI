@@ -5,8 +5,8 @@ import userRoutes from './routes/user';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
+app.use(bodyParser.json({ limit: '30mb' }));
 
 app.use('/api', userRoutes);
 
