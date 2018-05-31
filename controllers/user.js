@@ -104,7 +104,7 @@ async function uploadAvatar(req, res) {
         res.status(500).send({ message: 'Sube una imagen' });
       }
     }else {
-      if (req.files) fs.unlink(req.files.avatar.path);
+      if (req.files) fs.unlinkSync(req.files.avatar.path);
       res.status(200).send({ message: 'No puedes subir avatar de un perfil que no sea el tuyo' });
     }
   } catch (err) {
