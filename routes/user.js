@@ -8,7 +8,6 @@ const multipartMiddleware = multipart({
   uploadDir: './uploads/users',
 });
 
-api.get('/user/:avatar', authMiddleware.isAuth, userController.getAvatar);
 api.post('/sign-up', userController.signUp);
 api.post('/sign-in', userController.signIn);
 api.get('/users/:page?', authMiddleware.isAuth, userController.getUsers);
@@ -19,6 +18,6 @@ api.post(
   [authMiddleware.isAuth, multipartMiddleware],
   userController.uploadAvatar
 );
-api.get('/user/:avatar', authMiddleware.isAuth, userController.getAvatar);
+api.get('/avatar/:avatar', authMiddleware.isAuth, userController.getAvatar);
 
 export default api;

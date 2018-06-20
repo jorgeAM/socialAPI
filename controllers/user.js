@@ -1,4 +1,5 @@
 import User from '../models/user';
+import Follow from '../models/follow';
 import bcrypt from 'bcrypt-nodejs';
 import { codificar } from '../services/jwt';
 import fs from  'fs';
@@ -54,7 +55,19 @@ async function getUser(req, res) {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-    res.status(200).send({ user });
+
+    // Si sigo a este usuario
+    const followed = await Follow.findOne({
+      user: req.user.sub,
+      followed: user._id,
+    });
+
+    // Si este usuario me sigue
+    const follower = await Follow.findOne({
+      user: user._id,
+      followed: req.user.sub,
+    });
+    res.status(200).send({ user, followed, follower });
   } catch (err) {
     res.status(500).send({ err });
   }
@@ -63,8 +76,14 @@ async function getUser(req, res) {
 async function getUsers(req, res) {
   try {
     const { page } = req.params;
+
+    // usuarios que seguimos
+    const followed = await Follow.find({ user: req.user.sub }).select('-_id followed');
+
+    // usuarios que me siguen
+    const follower = await Follow.find({ followed: req.user.sub }).select('-_id user');
     const users = await User.find().paginate(page, 5);
-    res.status(200).send({ users });
+    res.status(200).send({ users, followed, follower });
   } catch (err) {
     res.status(500).send({ err });
   }
