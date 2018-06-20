@@ -89,6 +89,22 @@ async function getUsers(req, res) {
   }
 }
 
+async function getCounters(req, res) {
+  try {
+    if (req.params.id) {
+      const countOfFollowed = await Follow.count({ user: req.params.id });
+      const countOfFollower = await Follow.count({ followed: req.params.id });
+      res.status(200).send({ countOfFollowed, countOfFollower });
+    }else {
+      const countOfFollowed = await Follow.count({ user: req.user.sub });
+      const countOfFollower = await Follow.count({ followed: req.user.sub });
+      res.status(200).send({ countOfFollowed, countOfFollower });
+    }
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+}
+
 async function updateProfile(req, res) {
   try {
     const { id } = req.params;
@@ -145,6 +161,7 @@ export {
   signIn,
   getUser,
   getUsers,
+  getCounters,
   updateProfile,
   uploadAvatar,
   getAvatar,
