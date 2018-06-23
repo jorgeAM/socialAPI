@@ -9,5 +9,6 @@ const multipartMiddleware = multipart({
 });
 
 api.post('/publication', authMiddleware.isAuth, publicationController.addPublication);
+api.get('/publications/:page?', authMiddleware.isAuth, publicationController.getPublications);
 
 export default api;

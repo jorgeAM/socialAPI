@@ -22,7 +22,26 @@ async function addPublication(req, res) {
 }
 
 async function getPublications(req, res) {
+  try {
+    const { page } = req.params;
+    const me = req.user.sub;
+    const follows = await Follow.find({ user: me }).populate('followed').select('-_id followed');
 
+    // Tambien sirve
+    //const follows = await Follow.find({ user: me }).select('-_id followed');
+    const followed = [];
+    follows.forEach((follow) => {
+      followed.push(follow.followed);
+    });
+    const pubications = await Publication.find({
+      user: {
+        $in: followed,
+      },
+    }).sort('created_at').populate('user').paginate(page, 3);
+    res.status(200).send({ pubications });
+  } catch (error) {
+    res.status(500).send({ error });
+  }
 }
 
 export {
