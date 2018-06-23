@@ -127,7 +127,6 @@ async function uploadAvatar(req, res) {
         let array = path.split('/');
         let image = array[2];
         let type = req.files.avatar.type;
-        console.log(type);
         if (type == 'image/jpeg' || type == 'image/png' || type == 'image/jpg') {
           const user = await User.findByIdAndUpdate(id, { image }, { new: true });
           res.status(200).send({ user });
