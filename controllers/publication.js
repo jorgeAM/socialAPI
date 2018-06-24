@@ -44,7 +44,18 @@ async function getPublications(req, res) {
   }
 }
 
+async function getPublication(req, res) {
+  try {
+    const { id } = req. params;
+    const publication = await Publication.findById(id).populate('user');
+    res.status(200).send({ publication });
+  } catch (error) {
+    res.status(500).send({ error });
+  }
+}
+
 export {
   addPublication,
   getPublications,
+  getPublication,
 };
