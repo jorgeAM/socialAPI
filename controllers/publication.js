@@ -54,8 +54,22 @@ async function getPublication(req, res) {
   }
 }
 
+async function deletePublication(req, res) {
+  try {
+    const { id } = req. params;
+    const publication = await Publication.findById(id);
+    if (publication.user._id == req.user.sub) {
+      publication.remove();
+      res.status(200).send({ publication });
+    }else res.status(200).send({ message: 'Sólo puedes eliminar tus propias publicaciones' });
+  } catch (error) {
+    res.status(500).send({ error });
+  }
+}
+
 export {
   addPublication,
   getPublications,
   getPublication,
+  deletePublication,
 };
