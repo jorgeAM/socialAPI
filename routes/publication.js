@@ -12,5 +12,10 @@ api.post('/publication', authMiddleware.isAuth, publicationController.addPublica
 api.get('/publications/:page?', authMiddleware.isAuth, publicationController.getPublications);
 api.get('/publication/:id', authMiddleware.isAuth, publicationController.getPublication);
 api.delete('/publication/:id', authMiddleware.isAuth, publicationController.deletePublication);
+api.post('/publication/:id',
+  [authMiddleware.isAuth, multipartMiddleware],
+  publicationController.uploadFileInPublication
+);
+api.get('/publication-file/:image', publicationController.getFilesPublication);
 
 export default api;

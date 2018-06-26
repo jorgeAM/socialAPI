@@ -67,9 +67,43 @@ async function deletePublication(req, res) {
   }
 }
 
+async function uploadFileInPublication(req, res) {
+  try {
+    const { id } = req.params;
+    if (req.files) {
+      let path = req.files.file.path;
+      let array = path.split('/');
+      let file = array[2];
+      let type = req.files.file.type;
+      if (type == 'image/jpeg' || type == 'image/png' || type == 'image/jpg') {
+        const publication = await Publication.findByIdAndUpdate(id, { file }, { new: true });
+        res.status(200).send({ publication });
+      }else {
+        fs.unlinkSync(req.files.file.path);
+        res.status(500).send({ message: 'Solo puedes subir imágenes' });
+      }
+    }else {
+      res.status(500).send({ message: 'Sube una archivo' });
+    }
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+}
+
+function getFilesPublication(req, res) {
+  const { image } = req.params;
+  const ruta = `./uploads/publications/${image}`;
+  fs.stat(ruta, (err, stats) => {
+    if (err) res.status(500).send({ err });
+    res.sendFile(path.resolve(ruta));
+  });
+}
+
 export {
   addPublication,
   getPublications,
   getPublication,
   deletePublication,
+  uploadFileInPublication,
+  getFilesPublication,
 };
