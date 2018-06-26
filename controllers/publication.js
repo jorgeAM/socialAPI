@@ -76,9 +76,17 @@ async function uploadFileInPublication(req, res) {
       let file = array[2];
       let type = req.files.file.type;
       if (type == 'image/jpeg' || type == 'image/png' || type == 'image/jpg') {
-        const publication = await Publication.findByIdAndUpdate(id, { file }, { new: true });
-        res.status(200).send({ publication });
+        const publication = await Publication.findById(id);
+        if (publication.user._id == req.user.sub) {
+          publication.file = file;
+          publication.save();
+          res.status(200).send({ publication });
+        }else {
+          fs.unlinkSync(req.files.file.path);
+          res.status(200).send({ message: 'NO puedes hacer eso' });
+        }
       }else {
+        console.log(req.files.file.path);
         fs.unlinkSync(req.files.file.path);
         res.status(500).send({ message: 'Solo puedes subir imágenes' });
       }
