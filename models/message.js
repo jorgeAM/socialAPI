@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const messageSchema = Schema({
-  emmiter: {
+  emitter: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -20,6 +20,10 @@ const messageSchema = Schema({
   created_at: {
     type: Date,
     default: Date.now,
+  },
+  viewed: {
+    type: Boolean,
+    default: false,
   },
 });
 

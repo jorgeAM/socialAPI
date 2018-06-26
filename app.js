@@ -4,6 +4,7 @@ import cors from 'cors';
 import userRoutes from './routes/user';
 import followRoutes from './routes/follow';
 import publicationRoutes from './routes/publication';
+import messageRoutes from './routes/message';
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(bodyParser.json({ limit: '30mb' }));
 app.use('/api', userRoutes);
 app.use('/api', followRoutes);
 app.use('/api', publicationRoutes);
+app.use('/api', messageRoutes);
 
 app.use(cors());
 
