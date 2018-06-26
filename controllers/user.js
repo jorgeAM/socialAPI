@@ -1,5 +1,6 @@
 import User from '../models/user';
 import Follow from '../models/follow';
+import Publication from '../models/publication';
 import bcrypt from 'bcrypt-nodejs';
 import { codificar } from '../services/jwt';
 import fs from  'fs';
@@ -94,11 +95,13 @@ async function getCounters(req, res) {
     if (req.params.id) {
       const countOfFollowed = await Follow.count({ user: req.params.id });
       const countOfFollower = await Follow.count({ followed: req.params.id });
-      res.status(200).send({ countOfFollowed, countOfFollower });
+      const publications = await Publication.count({ user: req.params.id });
+      res.status(200).send({ countOfFollowed, countOfFollower, publications });
     }else {
       const countOfFollowed = await Follow.count({ user: req.user.sub });
       const countOfFollower = await Follow.count({ followed: req.user.sub });
-      res.status(200).send({ countOfFollowed, countOfFollower });
+      const publications = await Publication.count({ user: req.user.sub });
+      res.status(200).send({ countOfFollowed, countOfFollower, publications });
     }
   } catch (err) {
     res.status(500).send({ err });
