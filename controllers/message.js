@@ -42,8 +42,18 @@ async function sendedMessage(req, res) {
   }
 }
 
+async function getUnviewedMessages(req, res) {
+  try {
+    const messages = await Message.count({ viewed: false, receiver: req.user.sub });
+    res.status(200).send({ messages });;
+  } catch (e) {
+    res.status(404).send({ error });
+  }
+}
+
 export {
   sendMessage,
   receiveMessage,
   sendedMessage,
+  getUnviewedMessages,
 };
