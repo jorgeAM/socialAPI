@@ -18,6 +18,32 @@ async function sendMessage(req, res) {
   }
 }
 
+async function receiveMessage(req, res) {
+  try {
+    const { page } = req.params;
+    const messages = await Message.find({
+      receiver: req.user.sub,
+    }).populate('emitter', 'name surname nick image').paginate(page, 4);
+    res.status(200).send({ messages });
+  } catch (error) {
+    res.status(404).send({ error });
+  }
+}
+
+async function sendedMessage(req, res) {
+  try {
+    const { page } = req.params;
+    const messages = await Message.find({
+      emitter: req.user.sub,
+    }).populate('receiver', 'name surname nick image').paginate(page, 4);
+    res.status(200).send({ messages });;
+  } catch (error) {
+    res.status(404).send({ error });
+  }
+}
+
 export {
   sendMessage,
+  receiveMessage,
+  sendedMessage,
 };
