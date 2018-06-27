@@ -8,5 +8,6 @@ api.post('/send', authMiddleware.isAuth, messageController.sendMessage);
 api.get('/receive/:page?', authMiddleware.isAuth, messageController.receiveMessage);
 api.get('/sended/:page?', authMiddleware.isAuth, messageController.sendedMessage);
 api.get('/unviewed-messages', authMiddleware.isAuth, messageController.getUnviewedMessages);
+api.get('/view-messages', authMiddleware.isAuth, messageController.viewMessages);
 
 export default api;

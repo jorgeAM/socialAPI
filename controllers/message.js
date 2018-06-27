@@ -46,7 +46,23 @@ async function getUnviewedMessages(req, res) {
   try {
     const messages = await Message.count({ viewed: false, receiver: req.user.sub });
     res.status(200).send({ messages });;
-  } catch (e) {
+  } catch (error) {
+    res.status(404).send({ error });
+  }
+}
+
+async function viewMessages(req, res) {
+  try {
+    const messages = await Message.update({
+      viewed: false,
+      receiver: req.user.sub,
+    }, {
+      viewed: true,
+    }, {
+      multi: true,
+    });
+    res.status(200).send({ messages });
+  } catch (error) {
     res.status(404).send({ error });
   }
 }
@@ -56,4 +72,5 @@ export {
   receiveMessage,
   sendedMessage,
   getUnviewedMessages,
+  viewMessages,
 };
