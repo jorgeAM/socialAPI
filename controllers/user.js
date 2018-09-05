@@ -36,13 +36,8 @@ async function signIn(req, res) {
       res.status(500).send({ message: 'Usuario no existe' });
     }else {
       if (bcrypt.compareSync(password, user.password)) {
-        if (req.body.getToken) {
-          // Devolvemos token
-          const token = codificar(user);
-          res.status(200).send({ token });
-        }else {
-          res.status(200).send({ user });
-        }
+        const token = codificar(user);
+        res.status(200).send({ token, user });
       }else {
         res.status(404).send({ message: 'Contraseña incorrecta' });
       }
