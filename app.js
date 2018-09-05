@@ -10,12 +10,11 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(bodyParser.json({ limit: '30mb' }));
+app.use(cors());
 
 app.use('/api', userRoutes);
 app.use('/api', followRoutes);
 app.use('/api', publicationRoutes);
 app.use('/api', messageRoutes);
-
-app.use(cors());
 
 export default app;

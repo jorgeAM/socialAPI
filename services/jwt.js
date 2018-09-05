@@ -1,7 +1,7 @@
 import jwt from 'jwt-simple';
 import moment from 'moment';
 
-const secret = 'xxx';
+const secret = 'm1p455w0rd';
 
 function codificar(user) {
   const payload = {
