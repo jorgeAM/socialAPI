@@ -19,6 +19,6 @@ api.post(
   [authMiddleware.isAuth, multipartMiddleware],
   userController.uploadAvatar
 );
-api.get('/avatar/:avatar', authMiddleware.isAuth, userController.getAvatar);
+api.get('/avatar/:avatar', userController.getAvatar);
 
 export default api;

@@ -107,6 +107,20 @@ async function updateProfile(req, res) {
   try {
     const { id } = req.params;
     const { body } = req;
+    /*BORRAR PASSWORD*/
+    delete body.password;
+    /*BUSCAMOS QUE NO SE REPITA EL EMAIL*/
+    /*
+    const userByEmailOrNick = await User.find({
+      $or: [
+        { email: body.email },
+        { nick: body.nick },
+      ],
+    });
+    if (userByEmailOrNick.length > 0) res.status(200).send({
+      message: 'Email y/o Nick ya estan en uso',
+    });
+    */
     if (id == req.user.sub) {
       const user = await User.findByIdAndUpdate(id, body, { new: true });
       res.status(200).send({ user });
