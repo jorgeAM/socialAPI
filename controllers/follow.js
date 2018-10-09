@@ -25,10 +25,9 @@ async function followUser(req, res) {
 
 async function unFollowUser(req, res) {
   try {
-    const { body } = req;
     const unFollow = await Follow.deleteOne({
       user: req.user.sub,
-      followed: body.followed,
+      followed: req.params.id,
     });
     if (unFollow.n === 1) {
       res.status(200).send({ message: 'Se dejo de seguir al usuario' });

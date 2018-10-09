@@ -5,7 +5,7 @@ import * as authMiddleware from '../middlewares/authenticated';
 const api = express.Router();
 
 api.post('/follow', authMiddleware.isAuth, followController.followUser);
-api.post('/unfollow', authMiddleware.isAuth, followController.unFollowUser);
+api.delete('/unfollow/:id', authMiddleware.isAuth, followController.unFollowUser);
 api.get(
   '/myFollows/:id?/:page?',
   authMiddleware.isAuth,
